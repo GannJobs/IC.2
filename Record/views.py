@@ -10,7 +10,21 @@ from django.http import JsonResponse
 from django.http import HttpResponse
 from .utils import gerar_analise_e_pdf
 from django.contrib.auth.models import User
+from google.generativeai import generate_text
+import google.generativeai as genai
 
+api_key = 'AIzaSyBKVx96_XykSFS7T4Gz_kgfEJj9yrF4BkI'
+genai.configure(api_key=api_key)
+
+# Função para gerar o texto
+def generate_generative_text(prompt: str) -> str:
+    response = generate_text(
+        model='models/text-bison-001',  # Altere para o modelo correto se necessário
+        prompt=prompt,
+        temperature=0.7,  # Ajuste conforme necessário
+        max_output_tokens=150
+    )
+    return response.result
 
 class RecordModelViewSet(ModelViewSet):
     # authenticacao
@@ -29,21 +43,21 @@ class RecordModelViewSet(ModelViewSet):
             })
         return Response({'status': 204, 'msg': 'No Content'})
 
-    # Criar Registros
     def create(self, request):
         user = request.user
-        Title = request.data.get('title')
-        Description = request.data.get('description')
+        title = request.data.get('title')
+        description = request.data.get('description')
+        query_user = request.data.get('GPT')
 
-        Query_User = request.data.get('GPT')
+        try:
+            generated_text = generate_generative_text(query_user)
+            pdf_buffer = gerar_analise_e_pdf(generated_text)
 
-        pdf_buffer = gerar_analise_e_pdf(Query_User)
+            response = HttpResponse(pdf_buffer, content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment; filename="analise.pdf"'
 
-        # Configurar a resposta para download do PDF
-        response = HttpResponse(pdf_buffer, content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename="analise.pdf"'
+            Log.objects.create(user=user, description=f'The user is creating a record Name = {title}')
 
-        Log.objects.create(
-            user=request.user, description='the user is creating a record Name = {}')
-
-        return JsonResponse(response)
+            return response
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)

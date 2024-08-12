@@ -91,6 +91,10 @@ DATABASES = {
     }
 }
 
+# settings.py
+OPENAI_API_KEY = 'sk-6d0b_celnDgkbAfMR14cQyoTQMJo2sgm8EB7yzdaM4T3BlbkFJl4k-z7dxJxsmemvJjLmK2ofjG87j0kCvXdS80QDKEA'
+
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 

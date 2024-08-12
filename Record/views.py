@@ -47,6 +47,7 @@ class RecordModelViewSet(ModelViewSet):
         user = request.user
         title = request.data.get('title')
         description = request.data.get('description')
+        file = request.data.get('entrada')
         query_user = request.data.get('GPT')
 
         try:

@@ -9,5 +9,3 @@ class Record(models.Model):
     arq = models.FileField
     returned_arq = models.FileField
     created_at = models.DateField(auto_now_add=True)
-    query_GPT = models.CharField(max_length=200)
-    name_register = models.CharField(max_length=100)

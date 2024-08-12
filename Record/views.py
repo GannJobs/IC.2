@@ -48,10 +48,13 @@ class RecordModelViewSet(ModelViewSet):
         title = request.data.get('title')
         description = request.data.get('description')
         file = request.data.get('entrada')
-        query_user = request.data.get('GPT')
 
+        # le o arquivo enviado na entrada
+        
+
+        # manda para o GPT
         try:
-            generated_text = generate_generative_text(query_user)
+            generated_text = generate_generative_text('Prompt')
             pdf_buffer = gerar_analise_e_pdf(generated_text)
 
             response = HttpResponse(pdf_buffer, content_type='application/pdf')

@@ -1,5 +1,6 @@
 from io import BytesIO
 
+
 def gerar_analise_e_pdf(texto):
     buffer = BytesIO()
     # Aqui você adicionaria o código para criar o PDF e escrever no buffer

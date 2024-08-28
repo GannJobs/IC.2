@@ -1,35 +1,31 @@
 from io import BytesIO
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from reportlab.lib import styles
+from reportlab.platypus import Paragraph, SimpleDocTemplate
 
 def gerar_analise_e_pdf(texto):
     buffer = BytesIO()
 
-    from reportlab.lib.pagesizes import letter
-    from reportlab.pdfgen import canvas
+    # Substituir * por uma nova linha
+    texto = texto.replace('*', '\n\n')
 
-    # Função para quebrar o texto a cada 70 caracteres
-    def quebrar_texto(texto, max_length=70):
-        linhas = []
-        while len(texto) > max_length:
-            # Encontra o último espaço antes do limite de caracteres
-            corte = texto[:max_length].rfind(' ')
-            if corte == -1:  # Se não houver espaço, corte direto no limite
-                corte = max_length
-            linhas.append(texto[:corte])
-            texto = texto[corte:].strip()
-        linhas.append(texto)  # Adiciona o restante do texto
-        return linhas
+    # Criar o documento PDF
+    doc = SimpleDocTemplate(buffer, pagesize=letter)
+    story = []
 
-    c = canvas.Canvas(buffer, pagesize=letter)
-    
-    linhas = quebrar_texto(texto)
+    # Estilo de parágrafo justificado
+    estilo_normal = styles.getSampleStyleSheet()['Normal']
+    estilo_normal.alignment = 4  # Justifica o texto
 
-    y = 750  # Posição inicial no eixo y
-    for linha in linhas:
-        c.drawString(100, y, linha)
-        y -= 15  # Move a posição y para a próxima linha
+    # Quebrar o texto em parágrafos e adicionar ao documento
+    paragrafos = texto.split('\n\n')
+    for paragrafo in paragrafos:
+        p = Paragraph(paragrafo, estilo_normal)
+        story.append(p)
 
-    c.showPage()
-    c.save()
+    # Construir o PDF
+    doc.build(story)
 
     buffer.seek(0)
     return buffer

@@ -23,7 +23,7 @@ from rest_framework.permissions import AllowAny
 
 client = Groq(
     # This is the default and can be omitted
-    api_key="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"
+    api_key="coloque sua key aqui"
 )
 
 def generate_generative_text(prompt: str) -> str:

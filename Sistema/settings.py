@@ -80,20 +80,23 @@ WSGI_APPLICATION = 'Sistema.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'db',
+#         'USER': 'postgres',
+#         'PASSWORD': '123',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Records',
-        'USER': 'postgres',
-        'PASSWORD': '123',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-# settings.py
-OPENAI_API_KEY = 'sk-6d0b_celnDgkbAfMR14cQyoTQMJo2sgm8EB7yzdaM4T3BlbkFJl4k-z7dxJxsmemvJjLmK2ofjG87j0kCvXdS80QDKEA'
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

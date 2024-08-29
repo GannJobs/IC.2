@@ -17,8 +17,9 @@ import re
 import os
 from django.core.files.storage import FileSystemStorage
 from django.core.files.base import ContentFile
-
+from rest_framework import generics
 from groq import Groq
+from rest_framework.permissions import AllowAny
 
 client = Groq(
     # This is the default and can be omitted
@@ -104,7 +105,20 @@ def identificar_coluna(value, header):
         return "DATA DE ENSAIO"
     else:
         return header
+    
+class RecordListView(ModelViewSet):
+    queryset = Record.objects.all()
+    serializer_class = RecordSerializer
 
+    # Listar Registros
+    def list(self, request):
+        logs = Record.objects.all()
+        serial = RecordSerializer(logs, many=True)
+        if len(serial.data) > 0:
+            return Response({
+                'status': 302, 'Records': serial.data
+            })
+        return Response({'status': 204, 'msg': 'No Content'})
 
 class RecordModelViewSet(ModelViewSet):
     # authenticacao

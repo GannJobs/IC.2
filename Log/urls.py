@@ -2,7 +2,7 @@ from .views import LogModelViewSet, RegisterUserModelViewSet
 from rest_framework.routers import DefaultRouter
 
 Logrouter = DefaultRouter()
-Logrouter.register(r'Log', LogModelViewSet, basename='log')
+Logrouter.register(r'Log', LogModelViewSet, basename='Log')
 
 Registerrouter = DefaultRouter()
 Registerrouter.register(r'Register', RegisterUserModelViewSet, basename='register')

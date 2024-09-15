@@ -8,5 +8,4 @@ class Record(models.Model):
     description = models.CharField(max_length=300, default='')
     arq = models.FileField(upload_to='inputs/')
     returned_arq = models.FileField(upload_to='outputs/')
-    excel = models.FileField(upload_to='excels/')
     created_at = models.DateField(auto_now_add=True)

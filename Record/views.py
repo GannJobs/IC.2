@@ -23,7 +23,7 @@ from rest_framework.permissions import AllowAny
 
 client = Groq(
     # This is the default and can be omitted
-    api_key="coloque sua key aqui"
+    api_key="Insira sua key aqui"
 )
 
 def generate_generative_text(prompt: str) -> str:
@@ -116,7 +116,7 @@ class RecordListView(ModelViewSet):
     # Listar Registros
     def list(self, request):
         logs = Record.objects.all()
-        serial = RecordSerializer(logs, many=True)
+        serial = RecordSerializer(logs, many=True, context={'request': request})
         if len(serial.data) > 0:
             return Response({
                 'status': 302, 'Records': serial.data
@@ -133,7 +133,7 @@ class RecordModelViewSet(ModelViewSet):
     # Listar Registros
     def list(self, request):
         logs = Record.objects.filter(user=request.user)
-        serial = RecordSerializer(logs, many=True)
+        serial = RecordSerializer(logs, many=True, context={'request': request})
         if len(serial.data) > 0:
             return Response({
                 'status': 302, 'Records': serial.data
@@ -191,17 +191,12 @@ class RecordModelViewSet(ModelViewSet):
             # Gera o texto usando a função de IA
             generated_text = generate_generative_text(Console)
 
-            # Crie uma instância do FileSystemStorage para a pasta 'outputs'
-            fs = FileSystemStorage(location='outputs')
-
             # Gera o PDF com base no texto gerado
             pdf_buffer = gerar_analise_e_pdf(generated_text)
 
-            # Defina o nome do arquivo para o PDF
-            output_filename = f"analise_{request.user.id}_{title}.pdf"
+            # Generate PDF analysis and store it
+            pdf_content = ContentFile(pdf_buffer.getvalue(), name=f"{title}_analysis.pdf")
 
-            # Salve o PDF gerado na pasta 'outputs'
-            file_path = fs.save(output_filename, ContentFile(pdf_buffer.getvalue()))
 
             # Criação do registro no banco de dados
             Record.objects.create(
@@ -209,7 +204,7 @@ class RecordModelViewSet(ModelViewSet):
                 title=title,
                 description=description,
                 arq=input_file,
-                returned_arq=file_path
+                returned_arq=pdf_content
             )
 
             return Response({'status': 200, "msg": "created"})

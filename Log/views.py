@@ -1,7 +1,7 @@
 # Create your views here.
 from rest_framework.viewsets import ModelViewSet
 from .models import Log
-from .serializer import LogSerializer
+from .serializer import LogSerializer, UserSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from django.core.validators import validate_email
@@ -30,6 +30,9 @@ class LogModelViewSet(ModelViewSet):
         return Response({'status': 204, 'msg': 'No Content'})
 
 class RegisterUserModelViewSet(ModelViewSet):
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+
     def create(self, request):
         username = request.data.get('username')
         password = request.data.get('password')
@@ -56,10 +59,10 @@ class RegisterUserModelViewSet(ModelViewSet):
             response_data = {'status': 409, 'errorType': 'NameError', 'errorAt': 'email', 'msg': 'Email already registered'}
             return JsonResponse(response_data, status=409)
 
-        name = request.data.get('first name', '')
+        name = request.data.get('name')
 
         usuario = User.objects.create(
             username=username, password=hashed_password, email=email, first_name=name, last_name=" ")
         usuario.save()
         
-        return Response({'status': 201, 'msg': 'registered successfully'})
+        return Response({'status': 200, 'msg': 'registered successfully'})

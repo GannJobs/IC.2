@@ -25,8 +25,32 @@ SECRET_KEY = 'django-insecure-j()8x=_j9m$km-zc%+tx!bm@@m&iuwihvfrn6f0s@1g$vv%pb&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
+CORS_ALLOW_CREDENTIALS = True
+
+# Allowing requests from your frontend at localhost:3000
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',  # React frontend
+    'http://127.0.0.1:3000',  # React frontend
+]
+
+# Allow headers required by Axios and others
+CORS_ALLOW_HEADERS = [
+    'X-Requested-With',
+    'Content-Type',
+    'Authorization',
+    'X-CSRFToken',
+]
+
+# Add the following to allow OPTIONS preflight requests
+CORS_ALLOW_METHODS = [
+    'GET',
+    'POST',
+    'PUT',
+    'PATCH',
+    'DELETE'
+]
 
 # Application definition
 
@@ -48,6 +72,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # Should be near the top
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -127,7 +152,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/

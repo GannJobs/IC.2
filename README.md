@@ -31,3 +31,4 @@ python manage.py createsuperuser
 ```
 python manage.py runserver
 ```
+Lembre de colocar suas keys para autorizar a request para a IA.

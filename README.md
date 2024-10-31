@@ -33,3 +33,5 @@ python manage.py runserver
 ```
 Lembre de colocar suas keys para autorizar a request para a IA.
 Não somente escolher o modelo correto, caso tenha interesse de outras configurações, pesquisar API da mesma.
+
+Caso queira atualizar o prompt que analisa os laudos para adptar ao seu proprio, altere a variavel 'full_prompt' na Pasta Records no arquivo views.py.
